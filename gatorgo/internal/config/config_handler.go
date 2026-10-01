@@ -13,7 +13,7 @@ type Config struct {
 	Current_user_name string `json:"current_user_name"`
 }
 
-func getConfigFilePath() (string, error) {
+func GetConfigFilePath() (string, error) {
 	dir, errDir := os.UserHomeDir()
 	if errDir != nil {
 		fmt.Print("No Home-Directory found.")
@@ -22,8 +22,8 @@ func getConfigFilePath() (string, error) {
 	return path, errDir
 }
 
-func write(cfg Config) error {
-	path, errPath := getConfigFilePath()
+func Write(cfg Config) error {
+	path, errPath := GetConfigFilePath()
 	if errPath != nil {
 		return errPath
 	}
@@ -33,14 +33,14 @@ func write(cfg Config) error {
 	}
 	errWriting := os.WriteFile(path, data, 0666)
 	if errWriting != nil {
-		fmt.Print("Could not marshal config.")
+		return errWriting
 	}
 	return nil
 }
 
 func Read() *Config {
 	var newConfig Config
-	path, err := getConfigFilePath()
+	path, err := GetConfigFilePath()
 	if err != nil {
 		fmt.Print(err)
 		return &newConfig
@@ -60,7 +60,7 @@ func Read() *Config {
 
 func (c Config) SetUser(username string) error {
 	c.Current_user_name = username
-	errWriting := write(c)
+	errWriting := Write(c)
 	if errWriting != nil {
 		return errWriting
 	}

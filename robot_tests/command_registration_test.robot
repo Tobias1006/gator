@@ -27,7 +27,7 @@ Login - too many arguments
     Should Be Equal As Integers    ${result.rc}    1
     
     ${full_output}=    Catenate    ${result.stdout}    ${result.stderr}
-    Should Contain    ${full_output}    Incorrect number of arguments for the command found.
+    Should Contain    ${full_output}    incorrect number of arguments for the command found
 
 Login - unknown argument
     [Documentation]    Starts gator and checks the error message when an unknown argument is supplied
@@ -37,4 +37,4 @@ Login - unknown argument
     Should Be Equal As Integers    ${result.rc}    1
     
     ${full_output}=    Catenate    ${result.stdout}    ${result.stderr}
-    Should Contain    ${full_output}    Unknown command.
+    Should Contain    ${full_output}    unknown command

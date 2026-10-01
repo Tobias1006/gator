@@ -21,7 +21,7 @@ Login - no username
     Should Be Equal As Integers    ${result.rc}    1
     
     ${full_output}=    Catenate    ${result.stdout}    ${result.stderr}
-    Should Contain    ${full_output}    Incorrect number of arguments for the command found.
+    Should Contain    ${full_output}    incorrect number of arguments for the command found
 
 Login - Happy path_Username1
     [Documentation]    Starts gator and checks the result when a known command and username are supplied

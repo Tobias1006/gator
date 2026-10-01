@@ -2,29 +2,12 @@ package main
 
 import (
 	"fmt"
-	"io"
-	"os"
 	"testing"
+
+	"github.com/Tobias1006/gatorgo/internal/testkit"
 
 	"github.com/Tobias1006/gatorgo/internal/config"
 )
-
-func captureOutput(f func() error) (string, error) {
-	// save the real stdout so we can restore it later
-	old := os.Stdout
-
-	// create an os.Pipe() -- it gives you a connected reader and writer
-	r, w, _ := os.Pipe()
-	os.Stdout = w
-
-	err := f() // run the code that prints to stdout
-
-	w.Close()
-	os.Stdout = old // restore it!
-
-	out, _ := io.ReadAll(r)
-	return string(out), err
-}
 
 var cfg = config.Read()
 
@@ -43,26 +26,11 @@ func TestHandlerLogin(t *testing.T) {
 				Config: cfg,
 			},
 			command: config.Cmd{
-				Name:      "login",
+				Name:      "",
 				Arguments: []string{},
 			},
 			expectedOutput: "",
 			expectedError:  fmt.Errorf("incorrect number of arguments for the command found"),
-			expectedConfig: *cfg,
-		},
-		{
-			title: "No username",
-			state: config.State{
-				Config: cfg,
-			},
-			command: config.Cmd{
-				Name: "login",
-				Arguments: []string{
-					"login",
-				},
-			},
-			expectedOutput: "Too few arguments. \n",
-			expectedError:  fmt.Errorf("incorrect number of arguments for the command found \n exit status 1"),
 			expectedConfig: *cfg,
 		},
 		{
@@ -73,7 +41,6 @@ func TestHandlerLogin(t *testing.T) {
 			command: config.Cmd{
 				Name: "login",
 				Arguments: []string{
-					"login",
 					"ashley",
 				},
 			},
@@ -104,19 +71,24 @@ func TestHandlerLogin(t *testing.T) {
 	}
 
 	for _, c := range cases {
+		fmt.Print("---------------------\n")
 		fmt.Printf("%s \n", c.title)
-		output, err := captureOutput(func() error {
+		output, err := testkit.CaptureOutput(func() error {
 			return handlerLogin(&c.state, c.command)
 		})
 		fmt.Printf("Actual output: %v\n", output)
 		fmt.Printf("Actual error: %v\n", err)
 		if err != nil {
-			if err.Error() != c.expectedError.Error() {
+			if c.expectedError == nil {
 				t.Errorf("expected different error")
-			} else if output != c.expectedOutput {
-				t.Errorf("expected different output")
+			} else if err.Error() != c.expectedError.Error() {
+				t.Errorf("expected different error")
 			}
+		} else if c.expectedError != nil {
+			t.Errorf("expected different error")
 		}
-
+		if output != c.expectedOutput {
+			t.Errorf("expected different output")
+		}
 	}
 }
