@@ -2,10 +2,13 @@ package config
 
 import (
 	"fmt"
+
+	"github.com/Tobias1006/gatorgo/internal/database"
 )
 
 type State struct {
-	Config *Config
+	Db_Queries *database.Queries
+	Config     *Config
 }
 
 type Cmd struct {
