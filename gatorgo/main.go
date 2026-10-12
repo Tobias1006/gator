@@ -29,6 +29,11 @@ func main() {
 	cmds.CommandMap = make(map[string]func(*config.State, config.Cmd) error)
 	cmds.Register("login", handlerLogin)
 	cmds.Register("register", handlerRegister)
+	cmds.Register("reset", handlerReset)
+	cmds.Register("users", hanlderGetUsers)
+	cmds.Register("agg", handlerAggregator)
+	cmds.Register("addfeed", handlerAddFeed)
+	cmds.Register("feeds", handlerGetFeeds)
 	args := os.Args
 	if len(args) < 2 {
 		fmt.Print("Too few arguments. \n")

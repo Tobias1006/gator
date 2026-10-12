@@ -7,8 +7,8 @@ Library          Process
 ${COMMAND}       go
 ${WORKDIR}       ../gatorgo/
 ${USER1}         schorschi
-${USER2}         SchOrSchi
-${USER3}         SCHORSCHI
+${USER2}         SCHORSCHI
+${USER3}         SchOrSchi
 ${USER4}         5C#OR5C#!
 
 *** Test Cases ***
@@ -43,22 +43,17 @@ Login - Happy path_Username2
     ${full_output}=    Catenate    ${result.stdout}    ${result.stderr}
     Should Contain    ${full_output}    User   ${USER2}   has been set successfully.
 
-Login - Happy path_Username3
+Login - Fail_Username3
     [Documentation]    Starts gator and checks the result when a known command and username are supplied
     
     ${result}=    Run Process    ${COMMAND}    run    .    login    ${USER3}    cwd=${WORKDIR}
     
-    Should Be Equal As Integers    ${result.rc}    0
+    Should Be Equal As Integers    ${result.rc}    1
     
-    ${full_output}=    Catenate    ${result.stdout}    ${result.stderr}
-    Should Contain    ${full_output}    User   ${USER3}   has been set successfully.
-
-Login - Happy path_Username4
+Login - Fail_Username4
     [Documentation]    Starts gator and checks the result when a known command and username are supplied
 
     ${result}=    Run Process    ${COMMAND}    run    .    login    ${USER4}    cwd=${WORKDIR}
     
-    Should Be Equal As Integers    ${result.rc}    0
+    Should Be Equal As Integers    ${result.rc}    1
     
-    ${full_output}=    Catenate    ${result.stdout}    ${result.stderr}
-    Should Contain    ${full_output}    User   ${USER4}   has been set successfully.

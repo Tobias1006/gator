@@ -8,6 +8,8 @@ import (
 )
 
 func TestGetConfigFilePath(t *testing.T) {
+	fmt.Print("--------------------- Test: configHandler ---------------------\n")
+
 	cases := []struct {
 		title              string
 		expectedResultPath string
