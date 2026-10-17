@@ -41,6 +41,19 @@ func handlerAddFeed(s *config.State, cmd config.Cmd) error {
 		return errFeedCreation
 	}
 
+	// create new feed follow
+	feedFollowParams := database.CreateFeedFollowParams{
+		ID:        uuid.New(),
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
+		FeedID:    newFeed.ID,
+		UserID:    currentUser.ID,
+	}
+	_, errFeedFollow := s.Db_Queries.CreateFeedFollow(ctxt, feedFollowParams)
+	if errFeedFollow != nil {
+		return errFeedFollow
+	}
+
 	// print feed details
 	fmt.Printf("Feed %s was created. \n", newFeed.Name)
 	fmt.Printf("F-Name: %v \n F-ID: %v \n F-CreatedAt: %v \n", newFeed.Name, newFeed.ID, newFeed.CreatedAt)
